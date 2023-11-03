@@ -1,0 +1,103 @@
+---
+title: "Make interactive html without shiny"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+---
+
+<style>                     
+.navbar-brand {
+color:black!important;
+}
+</style>           
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(ggrepel)
+library(DT)
+library(plotly)
+```
+
+Description of this html file
+=======================================================================
+
+<b><font face="Georgia" size="3em" color="#000000"> This file includes interactive tables showing association testing results and interactive plots showing pathway enrichment test results. </font></b>
+
+
+Visualization of Statics Plots
+============================================================================
+<b><font face="Georgia" size="3em" color="#000000"> * Static plots based on the data including both sex</font></b>  
+
+
+Row{data-height=550}
+-----------------------------------------------------------------------
+### *
+```{r}
+readPath <- "***"
+load(paste0(readPath,"this.Rdat"))
+
+IPSvsC1
+```
+
+### *
+```{r}
+IPSvsC2
+```
+
+Row{data-height=550}
+-----------------------------------------------------------------------
+### *
+```{r}
+IPSvsC3
+```
+
+### *
+```{r}
+IPSvsC4
+```
+
+Association Test Results
+=======================================================================
+Row{data-height=500}
+-----------------------------------------------------------------------
+### <b><font face="Georgia" size="3em" color="#000000"> 1. both sex </font></b> <b><font face="Georgia" size="3em" color="#000000"> * Including covariates</font></b> 
+
+```{r}
+table1 <- read.csv(paste0(readPath,"/table1.txt"),sep="\t")
+DT::datatable(table1[,-2],filter="top", options = list(pageLength = 15))
+```
+
+Pathway Enrichment test
+=======================================================================
+```{r}
+
+resourceLabel <- c("A","B","C","D","E","F","G")
+
+
+
+whichItem <- "HallMark"
+load(paste0(pathIn,"whichItem",".pDat.Rdat"))
+
+plot_ly(pDat,
+        type = 'scatter',
+        mode = 'markers',
+        x = ~ factor(resource,levels=resourceLabel),
+        y = ~pathway,       
+        marker = list(size = ~-log(pval),sizeref = 0.3,sizemode = 'area',
+                      color= ~NES,color=seq(0, 39),
+                      sizebar=list(title="-log(pvalue)"),
+                      colorbar=list(title='NES'),
+                      colorscale='Viridis',
+                      reversescale =T),
+        text = ~disPro, ### pre-extract the leading edges
+        hovertemplate = paste(  
+          "<b>pathway: %{y}</b><br><br>",
+          "<b>%{x}</b><br><br>",
+          "leading edge: %{text}",
+          "<extra></extra>")
+) %>% layout(title = paste0(paste0("Enrichment test based on ",whichItem, " database")),
+             xaxis = list(title = "", tickangle = -20,tickfont=list(size = 12)),
+             yaxis = list(title = "",tickfont=list(size = 8)))
+
+```
