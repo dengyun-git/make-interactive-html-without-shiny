@@ -57,7 +57,7 @@ IPSvsC3
 IPSvsC4
 ```
 
-Association Test Results
+Interactive Table Showing Association Test Results
 =======================================================================
 Row{data-height=500}
 -----------------------------------------------------------------------
@@ -68,7 +68,7 @@ table1 <- read.csv(paste0(readPath,"/table1.txt"),sep="\t")
 DT::datatable(table1[,-2],filter="top", options = list(pageLength = 15))
 ```
 
-Pathway Enrichment test
+Interactive Bubble Plots Showing Pathway Enrichment test
 =======================================================================
 ```{r}
 
@@ -102,8 +102,8 @@ plot_ly(pDat,
 
 ```
 
-Interactive Volcano Plot
-=======================================================================
+Interactive Volcano Plot Showing Protein Differential Expression Between Phenotypes 
+====================================================================================
 ```{r}
 p.volcano <- plot_ly(data = volcanoDat, type = 'scatter', mode = 'markers', marker = list(size = 4), x = as.numeric(volcanoDat$log2fold), y = -log(as.numeric(volcanoDat$padj)), text = volcanoDat$labelName, mode = "markers", color = volcanoDat$YNsignif) %>% 
     layout(annotations = list(x = as.numeric(volcanoDat$log2fold),y = -log(as.numeric(volcanoDat$padj)), text = volcanoDat$labelName,xref = "x",yref = "y",
