@@ -101,3 +101,12 @@ plot_ly(pDat,
              yaxis = list(title = "",tickfont=list(size = 8)))
 
 ```
+
+Interactive Volcano Plot
+=======================================================================
+```{r}
+p.volcano <- plot_ly(data = volcanoDat, type = 'scatter', mode = 'markers', marker = list(size = 4), x = as.numeric(volcanoDat$log2fold), y = -log(as.numeric(volcanoDat$padj)), text = volcanoDat$labelName, mode = "markers", color = volcanoDat$YNsignif) %>% 
+    layout(annotations = list(x = as.numeric(volcanoDat$log2fold),y = -log(as.numeric(volcanoDat$padj)), text = volcanoDat$labelName,xref = "x",yref = "y",
+                              showarrow = FALSE,ax = 20,ay = -40,font = list(size = 8)), legend = list(orientation = "h"),title = titleMessage,xaxis = list(range=c(-1,1)))
+volcano
+```
